@@ -7,7 +7,7 @@
 程序包括：
 1. [Covariance Intersection Fusion](https://github.com/Jon-Wang/Information-Fusion-and-State-Estimation/tree/master/Covariance%20Intersection%20Fusion)
 
-	Sequential Covariance Intersection Fusion Kalman Filter for Multi-Sensor Systems with Multiple Time Delayed Measurements
+	Sequential Covariance Intersection Fusion Kalman Filter for Multi-Sensor Systems with Multiple Time Delayed Measurements(带观测滞后多传感器系统的协方差交叉融合Kalman滤波器)
 	利用斜方差交叉(CI)融合方法进行状态估计。
 
 2. [Improved Covariance Intersection](https://github.com/Jon-Wang/Information-Fusion-and-State-Estimation/tree/master/Improved%20Covariance%20Intersection)
