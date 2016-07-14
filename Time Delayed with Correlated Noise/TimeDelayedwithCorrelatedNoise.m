@@ -4,7 +4,7 @@
 %时间：2016-07-07
 %-----------------------------------------%
 clc;clear all;
-Bushu=100;
+Bushu=200;
 alpha1=3;alpha2=1.5;alpha3=3.5;
 Qxi1=1;Qxi2=3.5;Qxi3=3;Qw=0.02;
 randn('seed',6);w=sqrt(Qw)*randn(1,Bushu+10);
@@ -68,7 +68,7 @@ end
 t=1:Bushu;
 figure
 subplot(2,2,1);plot(t,x(1,t),'b',t,x1jian(1,t),'r:');
-subplot(2,2,2);plot(t,x(2,t),'b',t,x1jian(2,t),'r:');axis([0,100,-10,10]);
+subplot(2,2,2);plot(t,x(2,t),'b',t,x1jian(2,t),'r:');axis([0,Bushu,-10,10]);
 % --------------------传感器2---------------------%
 x2jian(:,1)=zeros(2,1);x2jianp(:,1)=zeros(2,1);x2jianpp(:,1)=zeros(2,1);
 p21(:,:,1)=0.1*eye(2);p22(:,:,1)=0.1*eye(2);p25(:,:,1)=0.1*eye(2);p23(:,:,1)=0.1*eye(2);p26(:,:,1)=0.1*eye(2);p29(:,:,1)=0.1*eye(2);
@@ -102,7 +102,7 @@ end
 t=1:Bushu;
 figure
 subplot(2,2,1);plot(t,x(1,t),'b',t,x2jian(1,t),'r:');
-subplot(2,2,2);plot(t,x(2,t),'b',t,x2jian(2,t),'r:');axis([0,100,-10,10]);
+subplot(2,2,2);plot(t,x(2,t),'b',t,x2jian(2,t),'r:');axis([0,Bushu,-10,10]);
 %------------------传感器3--------------------%
 x3jian(:,1)=zeros(2,1);x3jianp(:,1)=zeros(2,1);x3jianpp(:,1)=zeros(2,1);
 p31(:,:,1)=0.1*eye(2);p32(:,:,1)=0.1*eye(2);p35(:,:,1)=0.1*eye(2);p33(:,:,1)=0.1*eye(2);p36(:,:,1)=0.1*eye(2);p39(:,:,1)=0.1*eye(2);
@@ -136,7 +136,7 @@ end
 t=1:Bushu;
 figure
 subplot(2,2,1);plot(t,x(1,t),'b',t,x3jian(1,t),'r:');
-subplot(2,2,2);plot(t,x(2,t),'b',t,x3jian(2,t),'r:');axis([0,100,-10,10]);
+subplot(2,2,2);plot(t,x(2,t),'b',t,x3jian(2,t),'r:');axis([0,Bushu,-10,10]);
 %-------------------迹--------------------%
 trace_p1=trace(p15(:,:,Bushu))
 trace_p2=trace(p25(:,:,Bushu))
@@ -223,7 +223,7 @@ trace_Pm=trace(Pm(:,:,Bushu))
 t=1:Bushu;
 figure
 subplot(2,2,1);plot(t,x(1,t),'b',t,xfjian(1,t),'r:');
-subplot(2,2,2);plot(t,x(2,t),'b',t,xfjian(2,t),'r:');axis([0,100,-10,10]);
+subplot(2,2,2);plot(t,x(2,t),'b',t,xfjian(2,t),'r:');axis([0,Bushu,-8,8]);
 %-----------------SCI----------------%
 deta=0.0001;pp1=p15(:,:,Bushu);pp2=p25(:,:,Bushu);pp3=p35(:,:,Bushu);
 [w13,Pci13]=y13_0618(deta,pp1,pp3)                  %pp1和pp3形成pci1
@@ -234,8 +234,34 @@ for i=1:Bushu
 end
 t=1:Bushu;
 figure
-subplot(2,2,1);plot(t,x(1,t),'b',t,xci132(1,t),'r:');
-subplot(2,2,2);plot(t,x(2,t),'b',t,xci132(2,t),'r:');axis([0,100,-10,10]);
+subplot(1,1,1);plot(t,x(1,t),'b',t,xci132(1,t),'r:');
+figure
+subplot(1,1,1);plot(t,x(2,t),'b',t,xci132(2,t),'r:');axis([0,Bushu,-8,8]);
+%-----------------ex---------------%
+ex1(Bushu)=[0];ex2(Bushu)=[0];ex3(Bushu)=[0];exf(Bushu)=[0];exc(Bushu)=[0];
+ex1(1)=(x1jian(2,1)-x(2,1))*(x1jian(2,1)-x(2,1));
+for i=2:Bushu
+   ex1(i)=(x1jian(2,i)-x(2,i))*(x1jian(2,i)-x(2,i))+ex1(i-1);
+end   
+ex2(1)=(x2jian(2,1)-x(2,1))*(x2jian(2,1)-x(2,1));
+for i=2:Bushu
+   ex2(i)=(x2jian(2,i)-x(2,i))*(x2jian(2,i)-x(2,i))+ex2(i-1);
+end   
+ex3(1)=(x3jian(2,1)-x(2,1))*(x3jian(2,1)-x(2,1));
+for i=2:Bushu
+   ex3(i)=(x3jian(2,i)-x(2,i))*(x3jian(2,i)-x(2,i))+ex3(i-1);
+end   
+exf(1)=(xfjian(2,1)-x(2,1))*(xfjian(2,1)-x(2,1));
+for i=2:Bushu
+   exf(i)=(xfjian(2,i)-x(2,i))*(xfjian(2,i)-x(2,i))+exf(i-1);
+end   
+exc(1)=(xci132(2,1)-x(2,1))*(xci132(2,1)-x(2,1));
+for i=2:Bushu
+   exc(i)=(xci132(2,i)-x(2,i))*(xci132(2,i)-x(2,i))+exc(i-1);
+end   
+t=1:Bushu;
+figure
+plot(t,ex1(t),'m',t,ex2(t),'b',t,ex3(t),'r',t,exf(t),'k',t,exc(t),'k:');
 %--------------实际误差方差阵-------------% 
 Pci132_=Pci132*(w132*w13*w132*w13*inv(pp1)*pp1*inv(pp1)+w132*w13*w132*(1-w13)*inv(pp1)*P135(:,:,Bushu)*inv(pp3)+...
         w132*w13*(1-w132)*inv(pp1)*P125(:,:,Bushu)*inv(pp2)+w132*(1-w13)*w132*w13*inv(pp3)*P135(:,:,Bushu)'*inv(pp1)+w132*(1-w13)*w132*(1-w13)*inv(pp3)+...
@@ -261,4 +287,4 @@ polar(theta,r2,'b');
 polar(theta,r3,'r');
 polar(theta,rm,'k');
 polar(theta,rci132,'k:');
-polar(theta,rci132_,'k-.');
+polar(theta,rci132_,'k-.');axis([-0.45,0.45,-1.3,1.3]);
