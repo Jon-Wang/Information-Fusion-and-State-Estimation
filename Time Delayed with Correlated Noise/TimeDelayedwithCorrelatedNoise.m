@@ -239,29 +239,54 @@ figure
 subplot(1,1,1);plot(t,x(2,t),'b',t,xci132(2,t),'r:');axis([0,Bushu,-8,8]);
 %-----------------ex---------------%
 ex1(Bushu)=[0];ex2(Bushu)=[0];ex3(Bushu)=[0];exf(Bushu)=[0];exc(Bushu)=[0];
-ex1(1)=(x1jian(2,1)-x(2,1))*(x1jian(2,1)-x(2,1));
+ex1(1)=(x1jian(1,1)-x(1,1))*(x1jian(1,1)-x(1,1));
 for i=2:Bushu
-   ex1(i)=(x1jian(2,i)-x(2,i))*(x1jian(2,i)-x(2,i))+ex1(i-1);
+   ex1(i)=(x1jian(1,i)-x(1,i))*(x1jian(1,i)-x(1,i))+ex1(i-1);
 end   
-ex2(1)=(x2jian(2,1)-x(2,1))*(x2jian(2,1)-x(2,1));
+ex2(1)=(x2jian(1,1)-x(1,1))*(x2jian(1,1)-x(1,1));
 for i=2:Bushu
-   ex2(i)=(x2jian(2,i)-x(2,i))*(x2jian(2,i)-x(2,i))+ex2(i-1);
+   ex2(i)=(x2jian(1,i)-x(1,i))*(x2jian(1,i)-x(1,i))+ex2(i-1);
 end   
-ex3(1)=(x3jian(2,1)-x(2,1))*(x3jian(2,1)-x(2,1));
+ex3(1)=(x3jian(1,1)-x(1,1))*(x3jian(1,1)-x(1,1));
 for i=2:Bushu
-   ex3(i)=(x3jian(2,i)-x(2,i))*(x3jian(2,i)-x(2,i))+ex3(i-1);
+   ex3(i)=(x3jian(1,i)-x(1,i))*(x3jian(1,i)-x(1,i))+ex3(i-1);
 end   
-exf(1)=(xfjian(2,1)-x(2,1))*(xfjian(2,1)-x(2,1));
+exf(1)=(xfjian(1,1)-x(1,1))*(xfjian(1,1)-x(1,1));
 for i=2:Bushu
-   exf(i)=(xfjian(2,i)-x(2,i))*(xfjian(2,i)-x(2,i))+exf(i-1);
+   exf(i)=(xfjian(1,i)-x(1,i))*(xfjian(1,i)-x(1,i))+exf(i-1);
 end   
-exc(1)=(xci132(2,1)-x(2,1))*(xci132(2,1)-x(2,1));
+exc(1)=(xci132(1,1)-x(1,1))*(xci132(1,1)-x(1,1));
 for i=2:Bushu
-   exc(i)=(xci132(2,i)-x(2,i))*(xci132(2,i)-x(2,i))+exc(i-1);
+   exc(i)=(xci132(1,i)-x(1,i))*(xci132(1,i)-x(1,i))+exc(i-1);
 end   
 t=1:Bushu;
 figure
 plot(t,ex1(t),'m',t,ex2(t),'b',t,ex3(t),'r',t,exf(t),'k',t,exc(t),'k:');
+
+% ex1(Bushu)=[0];ex2(Bushu)=[0];ex3(Bushu)=[0];exf(Bushu)=[0];exc(Bushu)=[0];
+% ex1(1)=(x1jian(2,1)-x(2,1))*(x1jian(2,1)-x(2,1));
+% for i=2:Bushu
+%    ex1(i)=(x1jian(2,i)-x(2,i))*(x1jian(2,i)-x(2,i))+ex1(i-1);
+% end   
+% ex2(1)=(x2jian(2,1)-x(2,1))*(x2jian(2,1)-x(2,1));
+% for i=2:Bushu
+%    ex2(i)=(x2jian(2,i)-x(2,i))*(x2jian(2,i)-x(2,i))+ex2(i-1);
+% end   
+% ex3(1)=(x3jian(2,1)-x(2,1))*(x3jian(2,1)-x(2,1));
+% for i=2:Bushu
+%    ex3(i)=(x3jian(2,i)-x(2,i))*(x3jian(2,i)-x(2,i))+ex3(i-1);
+% end   
+% exf(1)=(xfjian(2,1)-x(2,1))*(xfjian(2,1)-x(2,1));
+% for i=2:Bushu
+%    exf(i)=(xfjian(2,i)-x(2,i))*(xfjian(2,i)-x(2,i))+exf(i-1);
+% end   
+% exc(1)=(xci132(2,1)-x(2,1))*(xci132(2,1)-x(2,1));
+% for i=2:Bushu
+%    exc(i)=(xci132(2,i)-x(2,i))*(xci132(2,i)-x(2,i))+exc(i-1);
+% end   
+% t=1:Bushu;
+% figure
+% plot(t,ex1(t),'m',t,ex2(t),'b',t,ex3(t),'r',t,exf(t),'k',t,exc(t),'k:');
 %-------------- µº ŒÛ≤Ó∑Ω≤Ó’Û-------------% 
 Pci132_=Pci132*(w132*w13*w132*w13*inv(pp1)*pp1*inv(pp1)+w132*w13*w132*(1-w13)*inv(pp1)*P135(:,:,Bushu)*inv(pp3)+...
         w132*w13*(1-w132)*inv(pp1)*P125(:,:,Bushu)*inv(pp2)+w132*(1-w13)*w132*w13*inv(pp3)*P135(:,:,Bushu)'*inv(pp1)+w132*(1-w13)*w132*(1-w13)*inv(pp3)+...
