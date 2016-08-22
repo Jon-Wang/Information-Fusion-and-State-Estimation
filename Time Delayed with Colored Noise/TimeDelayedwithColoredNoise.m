@@ -5,29 +5,27 @@
 %-----------------------------------------%
 clc;clear all;
 Bushu=200;
-% B1=3;B2=1.5;B3=3.5;
-% Qxi1=1;Qxi2=3.5;Qxi3=3;Qw=0.02;
-
-B1=3;B2=1;B3=2;
+B1=3;B2=6;B3=4.5;
 Qxi1=1;Qxi2=3.5;Qxi3=3;Qw=0.02;
+
+% B1=3;B2=6;B3=4.5;
+% Qxi1=1;Qxi2=3.5;Qxi3=3;Qw=0.02;
 randn('seed',6);w=sqrt(Qw)*randn(1,Bushu+10);
 randn('seed',2);xi1=sqrt(Qxi1)*randn(1,Bushu+10);
 randn('seed',5);xi2=sqrt(Qxi2)*randn(1,Bushu+10);
 randn('seed',4);xi3=sqrt(Qxi3)*randn(1,Bushu+10);
 %-------------------系统模型-------------------%
-% fai0=[0.1 0.3;0 0.6];fai1=[0.6 0.2;-0.01 0.6];fai2=[0.4 0.6;-0.1 -0.5];
-% gama=[2;-4];
-% h01=[3 1];h11=[0 1];h21=[1 2];h31=[0 0];
-% h02=[5 0.9];h12=[1 1];h22=[0.4 0.8];h32=[0 0];
-% h03=[5 0.8];h13=[0.6 1];h23=[0 0];h33=[0 0];
-% fai0=[0.8 0;0.1 -0.5];fai1=[-0.4 0;0.6 0.5];fai2=[0.4 0.6;0.1 0.5];
+fai0=[0.65 0;-0.1 0.5];fai1=[-0.1 0.2;0.1 -0.1];fai2=[0.4 0.6;0 0.5];
+gama=[1.4;-1.2];%可行
+h01=[0.5 1];h11=[0 2];h21=[0.1 0.8];h31=[0 0];
+h02=[1 0.9];h12=[0.1 0];h22=[0 0.8];h32=[0 0];
+h03=[5 0.9];h13=[0.6 1];h23=[0.1 1];h33=[0 0];
 
-
-fai0=[0.8 -0.1;0.1 -0.5];fai1=[-0.4 0.2;-0.8 0.5];fai2=[0.4 0.6;0.1 0.5];
-gama=[1.2;-1.2];%可行
-h01=[0 1];h11=[0 2];h21=[0.1 0.1];h31=[0 0];
-h02=[1 0.9];h12=[6 0];h22=[0.4 0.8];h32=[0 0];
-h03=[5 0.8];h13=[0.6 1];h23=[0 1];h33=[0 0];
+% fai0=[0.1 0.3;0 0.6];fai1=[0.6 0.2;0 0.6];fai2=[0.4 0.6;-0.1 -0.5];
+% gama=[1.4;-1.2];%可行
+% h01=[1 1];h11=[0 2];h21=[0.1 0.8];h31=[0 0];
+% h02=[1 0.9];h12=[0.1 0];h22=[0 0.8];h32=[0 0];
+% h03=[1 0.9];h13=[0.6 1];h23=[0.1 1];h33=[0 0];
 
 H01=h01*fai0+h11-B1*h01;H11=h01*fai1+h21-B1*h11;H21=h01*fai2+h31-B1*h21;
 H02=h02*fai0+h12-B2*h02;H12=h02*fai1+h22-B2*h12;H22=h02*fai2+h32-B2*h22;
@@ -81,10 +79,10 @@ for i=1:Bushu+5
     x1jian(:,i+1)=x1jianp(:,i)+k1(:,i+1)*eps1(i+1);         %滤波
     x1jianp(:,i+1)=fai0*x1jian(:,i+1)+fai1*x1jianpp(:,i+1)+fai2*x1jianpp2(:,i+1)+gama*S1*inv(Qeps1(i+1))*eps1(i+1); %预报
 end 
-% t=1:Bushu;
-% figure
-% subplot(2,2,1);plot(t,x(1,t),'b',t,x1jianp(1,t),'r:');
-% subplot(2,2,2);plot(t,x(2,t),'b',t,x1jianp(2,t),'r:');axis([0,Bushu,-10,10]);
+t=1:Bushu;
+figure
+subplot(2,2,1);plot(t,x(1,t),'b',t,x1jianp(1,t),'r:');
+subplot(2,2,2);plot(t,x(2,t),'b',t,x1jianp(2,t),'r:');
 % --------------------传感器2---------------------%
 x2jian(:,1)=zeros(2,1);x2jianp(:,1)=zeros(2,1);x2jianpp(:,1)=zeros(2,1);
 p21(:,:,1)=0.1*eye(2);p22(:,:,1)=0.1*eye(2);p25(:,:,1)=0.1*eye(2);p23(:,:,1)=0.1*eye(2);p26(:,:,1)=0.1*eye(2);p29(:,:,1)=0.1*eye(2);
@@ -117,10 +115,10 @@ for i=1:Bushu+5
     x2jian(:,i+1)=x2jianp(:,i)+k2(:,i+1)*eps2(i+1);         %滤波
     x2jianp(:,i+1)=fai0*x2jian(:,i+1)+fai1*x2jianpp(:,i+1)+fai2*x2jianpp2(:,i+1)+gama*S2*inv(Qeps2(i+1))*eps2(i+1); %预报
 end 
-% t=1:Bushu;
-% figure
-% subplot(2,2,1);plot(t,x(1,t),'b',t,x2jianp(1,t),'r:');
-% subplot(2,2,2);plot(t,x(2,t),'b',t,x2jianp(2,t),'r:');axis([0,Bushu,-10,10]);
+t=1:Bushu;
+figure
+subplot(2,2,1);plot(t,x(1,t),'b',t,x2jianp(1,t),'r:');
+subplot(2,2,2);plot(t,x(2,t),'b',t,x2jianp(2,t),'r:');
 %------------------传感器3--------------------%
 x3jian(:,1)=zeros(2,1);x3jianp(:,1)=zeros(2,1);x3jianpp(:,1)=zeros(2,1);
 p31(:,:,1)=0.1*eye(2);p32(:,:,1)=0.1*eye(2);p35(:,:,1)=0.1*eye(2);p33(:,:,1)=0.1*eye(2);p36(:,:,1)=0.1*eye(2);p39(:,:,1)=0.1*eye(2);
@@ -179,14 +177,15 @@ for i=1:Bushu
     P1211(:,:,i+1)=P123(:,:,i)'+ k1pp2(:,i+1)*Qeps12(i+1)*k2(:,i+1)'-k1pp2(:,i+1)*(H01*P121(:,:,i)+H11*P122(:,:,i)'+H21*P123(:,:,i)')-(P123(:,:,i)'*H02'*k2(:,i+1)'+P126(:,:,i)'*H12'*k2(:,i+1)'+P129(:,:,i)*H22'*k2(:,i+1)');
     P1212(:,:,i+1)=P126(:,:,i)'+ k1pp2(:,i+1)*Qeps12(i+1)*k2pp(:,i+1)'-k1pp2(:,i+1)*(H01*P122(:,:,i)+H11*P125(:,:,i)'+H21*P126(:,:,i)')-(P123(:,:,i)'*H02'*k2pp(:,i+1)'+P126(:,:,i)'*H12'*k2pp(:,i+1)'+P129(:,:,i)*H22'*k2pp(:,i+1)');
     P1213(:,:,i+1)=P129(:,:,i)+ k1pp2(:,i+1)*Qeps12(i+1)*k2pp2(:,i+1)'-k1pp2(:,i+1)*(H01*P123(:,:,i)+H11*P126(:,:,i)+H21*P129(:,:,i))-(P123(:,:,i)'*H02'*k2pp2(:,i+1)'+P126(:,:,i)'*H12'*k2pp2(:,i+1)'+P129(:,:,i)*H22'*k2pp2(:,i+1)');
-    P1210(:,:,i+1)=P1211(:,:,i+1)*fai0'+P1212(:,:,i+1)*fai1'+P1213(:,:,i+1)*fai2'+(-k1pp2(:,i+1)*S1'-(P123(:,:,i)'*H02'+P126(:,:,i)'*H12'+P129(:,:,i)*H22')*inv(Qeps2(i+1))'*S2'+k1pp2(:,i+1)*Qeps12(i+1)*inv(Qeps2(i+1))'*S2')*gama';
+    P1210(:,:,i+1)=P1211(:,:,i+1)*fai0'+P1212(:,:,i+1)*fai1'+P1213(:,:,i+1)*fai2'+(-k1pp2(:,i+1)*S1'-(P123(:,:,i)'*H02'+P126(:,:,i)'*H12'+P129(:,:,i)*H22')*(inv(Qeps2(i+1)))'*S2'+k1pp2(:,i+1)*Qeps12(i+1)*(inv(Qeps2(i+1)))'*S2')*gama';
     P1214(:,:,i+1)=P123(:,:,i)+k1(:,i+1)*Qeps12(i+1)*k2pp2(:,i+1)'-k1(:,i+1)*(H01*P123(:,:,i)+H11*P126(:,:,i)+H21*P129(:,:,i))-(P121(:,:,i)*H02'*k2pp2(:,i+1)'+P122(:,:,i)*H12'*k2pp2(:,i+1)'+P123(:,:,i)*H22'*k2pp2(:,i+1)');
-    P122(:,:,i+1)=(P125(:,:,i+1)*fai0'+P126(:,:,i+1)*fai1'+P1214(:,:,i+1)*fai2'+(-k1(:,i+1)*S1'-(P121(:,:,i)*H02'+P122(:,:,i)*H12'+P123(:,:,i)*H22')*inv(Qeps2(i+1))'*S2'+k1(:,i+1)*Qeps12(i+1)*inv(Qeps2(i+1))'*S2')*gama')';
+    P122(:,:,i+1)=(P125(:,:,i+1)*fai0'+P126(:,:,i+1)*fai1'+P1214(:,:,i+1)*fai2'+(-k1(:,i+1)*S1'-(P121(:,:,i)*H02'+P122(:,:,i)*H12'+P123(:,:,i)*H22')*(inv(Qeps2(i+1)))'*S2'+k1(:,i+1)*Qeps12(i+1)*(inv(Qeps2(i+1)))'*S2')*gama')';
     P1215(:,:,i+1)=P126(:,:,i)+k1pp(:,i+1)*Qeps12(i+1)*k2pp2(:,i+1)'-k1pp(:,i+1)*(H01*P123(:,:,i)+H11*P126(:,:,i)+H21*P129(:,:,i))-(P122(:,:,i)'*H02'*k2pp2(:,i+1)'+P125(:,:,i)*H12'*k2pp2(:,i+1)'+P126(:,:,i)*H22'*k2pp2(:,i+1)');
-    P123(:,:,i+1)=(P122(:,:,i+1)*fai0'+P129(:,:,i+1)*fai1'+P1215(:,:,i+1)*fai2'+(-k1pp(:,i+1)*S1'-(P122(:,:,i)'*H02'+P125(:,:,i)*H12'+P126(:,:,i)*H22')*inv(Qeps2(i+1))'*S2'+k1pp(:,i+1)*Qeps12(i+1)*inv(Qeps2(i+1))'*S2')*gama')';
-    P121(:,:,i+1)=fai0*P122(:,:,i+1)'+fai1*P123(:,:,i+1)'+fai2*P1210(:,:,i+1)+gama*(-S2*k2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P121(:,:,i)'+H11*P122(:,:,i)'+H21*P123(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps12(i+1)*k2(:,i+1)')*fai0'+...;
+    P123(:,:,i+1)=(P122(:,:,i+1)*fai0'+P129(:,:,i+1)*fai1'+P1215(:,:,i+1)*fai2'+(-k1pp(:,i+1)*S1'-(P122(:,:,i)'*H02'+P125(:,:,i)*H12'+P126(:,:,i)*H22')*(inv(Qeps2(i+1)))'*S2'+k1pp(:,i+1)*Qeps12(i+1)*(inv(Qeps2(i+1)))'*S2')*gama')';
+    P121(:,:,i+1)=fai0*P122(:,:,i+1)'+fai1*P123(:,:,i+1)'+fai2*P1210(:,:,i+1)+...
+        gama*(-S2*k2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P121(:,:,i)'+H11*P122(:,:,i)'+H21*P123(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps12(i+1)*k2(:,i+1)')*fai0'+...;
         gama*(-S2*k2pp(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P122(:,:,i)+H11*P125(:,:,i)+H21*P126(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps12(i+1)*k2pp(:,i+1)')*fai1'+...
-        gama*(-S2*k2pp2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P123(:,:,i)+H11*P123(:,:,i)+H21*P129(:,:,i))+S1*inv(Qeps1(i+1))*Qeps12(i+1)*k2pp2(:,i+1)')*fai2'+...
+        gama*(-S2*k2pp2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P123(:,:,i)+H11*P126(:,:,i)+H21*P129(:,:,i))+S1*inv(Qeps1(i+1))*Qeps12(i+1)*k2pp2(:,i+1)')*fai2'+...
         gama*(Qw+S1*inv(Qeps1(i+1))*Qeps12(i+1)*(inv(Qeps2(i+1)))'*S2'-S2*inv(Qeps2(i+1))*S2'-S1*inv(Qeps1(i+1))*S1')*gama';
 end
 
@@ -200,14 +199,15 @@ for i=1:Bushu
     P1311(:,:,i+1)=P133(:,:,i)'+ k1pp2(:,i+1)*Qeps13(i+1)*k3(:,i+1)'-k1pp2(:,i+1)*(H01*P131(:,:,i)+H11*P132(:,:,i)'+H21*P133(:,:,i)')-(P133(:,:,i)'*H03'*k3(:,i+1)'+P136(:,:,i)'*H13'*k3(:,i+1)'+P139(:,:,i)*H23'*k3(:,i+1)');
     P1312(:,:,i+1)=P136(:,:,i)'+ k1pp2(:,i+1)*Qeps13(i+1)*k3pp(:,i+1)'-k1pp2(:,i+1)*(H01*P132(:,:,i)+H11*P135(:,:,i)'+H21*P136(:,:,i)')-(P133(:,:,i)'*H03'*k3pp(:,i+1)'+P136(:,:,i)'*H13'*k3pp(:,i+1)'+P139(:,:,i)*H23'*k3pp(:,i+1)');
     P1313(:,:,i+1)=P139(:,:,i)+ k1pp2(:,i+1)*Qeps13(i+1)*k3pp2(:,i+1)'-k1pp2(:,i+1)*(H01*P133(:,:,i)+H11*P136(:,:,i)+H21*P139(:,:,i))-(P133(:,:,i)'*H03'*k3pp2(:,i+1)'+P136(:,:,i)'*H13'*k3pp2(:,i+1)'+P139(:,:,i)*H23'*k3pp2(:,i+1)');
-    P1310(:,:,i+1)=P1311(:,:,i+1)*fai0'+P1312(:,:,i+1)*fai1'+P1313(:,:,i+1)*fai2'+(-k1pp2(:,i+1)*S1'-(P133(:,:,i)'*H03'+P136(:,:,i')*H13'+P139(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k1pp2(:,i+1)*Qeps13(i+1)*inv(Qeps3(i+1))'*S3')*gama';
+    P1310(:,:,i+1)=P1311(:,:,i+1)*fai0'+P1312(:,:,i+1)*fai1'+P1313(:,:,i+1)*fai2'+(-k1pp2(:,i+1)*S1'-(P133(:,:,i)'*H03'+P136(:,:,i')*H13'+P139(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k1pp2(:,i+1)*Qeps13(i+1)*(inv(Qeps3(i+1)))'*S3')*gama';
     P1314(:,:,i+1)=P133(:,:,i)+k1(:,i+1)*Qeps13(i+1)*k3pp2(:,i+1)'-k1(:,i+1)*(H01*P133(:,:,i)+H11*P136(:,:,i)+H21*P139(:,:,i))-(P131(:,:,i)*H03'*k3pp2(:,i+1)'+P132(:,:,i)*H13'*k3pp2(:,i+1)'+P133(:,:,i)*H23'*k3pp2(:,i+1)');
-    P132(:,:,i+1)=(P135(:,:,i+1)*fai0'+P136(:,:,i+1)*fai1'+P1314(:,:,i+1)*fai2'+(-k1(:,i+1)*S1'-(P131(:,:,i)*H03'+P132(:,:,i)*H13'+P133(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k1(:,i+1)*Qeps13(i+1)*inv(Qeps3(i+1))'*S3')*gama')';
+    P132(:,:,i+1)=(P135(:,:,i+1)*fai0'+P136(:,:,i+1)*fai1'+P1314(:,:,i+1)*fai2'+(-k1(:,i+1)*S1'-(P131(:,:,i)*H03'+P132(:,:,i)*H13'+P133(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k1(:,i+1)*Qeps13(i+1)*(inv(Qeps3(i+1)))'*S3')*gama')';
     P1315(:,:,i+1)=P136(:,:,i)+k1pp(:,i+1)*Qeps13(i+1)*k3pp2(:,i+1)'-k1pp(:,i+1)*(H01*P133(:,:,i)+H11*P136(:,:,i)+H21*P139(:,:,i))-(P132(:,:,i)'*H03'*k3pp2(:,i+1)'+P135(:,:,i)*H13'*k3pp2(:,i+1)'+P136(:,:,i)*H23'*k3pp2(:,i+1)');
-    P133(:,:,i+1)=(P132(:,:,i+1)*fai0'+P139(:,:,i+1)*fai1'+P1315(:,:,i+1)*fai2'+(-k1pp(:,i+1)*S1'-(P132(:,:,i)'*H03'+P135(:,:,i)*H13'+P136(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k1pp(:,i+1)*Qeps13(i+1)*inv(Qeps3(i+1))'*S3')*gama')';
-    P131(:,:,i+1)=fai0*P132(:,:,i+1)'+fai1*P133(:,:,i+1)'+fai2*P1310(:,:,i+1)+gama*(-S3*k3(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P131(:,:,i)'+H11*P132(:,:,i)'+H21*P133(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps13(i+1)*k3(:,i+1)')*fai0'+...;
+    P133(:,:,i+1)=(P132(:,:,i+1)*fai0'+P139(:,:,i+1)*fai1'+P1315(:,:,i+1)*fai2'+(-k1pp(:,i+1)*S1'-(P132(:,:,i)'*H03'+P135(:,:,i)*H13'+P136(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k1pp(:,i+1)*Qeps13(i+1)*(inv(Qeps3(i+1)))'*S3')*gama')';
+    P131(:,:,i+1)=fai0*P132(:,:,i+1)'+fai1*P133(:,:,i+1)'+fai2*P1310(:,:,i+1)+...
+        gama*(-S3*k3(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P131(:,:,i)'+H11*P132(:,:,i)'+H21*P133(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps13(i+1)*k3(:,i+1)')*fai0'+...;
         gama*(-S3*k3pp(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P132(:,:,i)+H11*P135(:,:,i)+H21*P136(:,:,i)')+S1*inv(Qeps1(i+1))*Qeps13(i+1)*k3pp(:,i+1)')*fai1'+...
-        gama*(-S3*k3pp2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P133(:,:,i)+H11*P133(:,:,i)+H21*P139(:,:,i))+S1*inv(Qeps1(i+1))*Qeps13(i+1)*k3pp2(:,i+1)')*fai2'+...
+        gama*(-S3*k3pp2(:,i+1)'-S1*inv(Qeps1(i+1))*(H01*P133(:,:,i)+H11*P136(:,:,i)+H21*P139(:,:,i))+S1*inv(Qeps1(i+1))*Qeps13(i+1)*k3pp2(:,i+1)')*fai2'+...
         gama*(Qw+S1*inv(Qeps1(i+1))*Qeps13(i+1)*(inv(Qeps3(i+1)))'*S3'-S3*inv(Qeps3(i+1))*S3'-S1*inv(Qeps1(i+1))*S1')*gama';
 end
 
@@ -221,27 +221,28 @@ for i=1:Bushu
     P2311(:,:,i+1)=P233(:,:,i)'+ k2pp2(:,i+1)*Qeps23(i+1)*k3(:,i+1)'-k2pp2(:,i+1)*(H02*P231(:,:,i)+H12*P232(:,:,i)'+H22*P233(:,:,i)')-(P233(:,:,i)'*H03'*k3(:,i+1)'+P236(:,:,i)'*H13'*k3(:,i+1)'+P239(:,:,i)*H23'*k3(:,i+1)');
     P2312(:,:,i+1)=P236(:,:,i)'+ k2pp2(:,i+1)*Qeps23(i+1)*k3pp(:,i+1)'-k2pp2(:,i+1)*(H02*P232(:,:,i)+H12*P235(:,:,i)'+H22*P236(:,:,i)')-(P233(:,:,i)'*H03'*k3pp(:,i+1)'+P236(:,:,i)'*H13'*k3pp(:,i+1)'+P239(:,:,i)*H23'*k3pp(:,i+1)');
     P2313(:,:,i+1)=P239(:,:,i)+ k2pp2(:,i+1)*Qeps23(i+1)*k3pp2(:,i+1)'-k2pp2(:,i+1)*(H02*P233(:,:,i)+H12*P236(:,:,i)+H22*P239(:,:,i))-(P233(:,:,i)'*H03'*k3pp2(:,i+1)'+P236(:,:,i)'*H13'*k3pp2(:,i+1)'+P239(:,:,i)*H23'*k3pp2(:,i+1)');
-    P2310(:,:,i+1)=P2311(:,:,i+1)*fai0'+P2312(:,:,i+1)*fai1'+P2313(:,:,i+1)*fai2'+(-k2pp2(:,i+1)*S2'-(P233(:,:,i)'*H03'+P236(:,:,i')*H13'+P239(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k2pp2(:,i+1)*Qeps23(i+1)*inv(Qeps3(i+1))'*S3')*gama';
+    P2310(:,:,i+1)=P2311(:,:,i+1)*fai0'+P2312(:,:,i+1)*fai1'+P2313(:,:,i+1)*fai2'+(-k2pp2(:,i+1)*S2'-(P233(:,:,i)'*H03'+P236(:,:,i')*H13'+P239(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k2pp2(:,i+1)*Qeps23(i+1)*(inv(Qeps3(i+1)))'*S3')*gama';
     P2314(:,:,i+1)=P233(:,:,i)+k2(:,i+1)*Qeps23(i+1)*k3pp2(:,i+1)'-k2(:,i+1)*(H02*P233(:,:,i)+H12*P236(:,:,i)+H22*P239(:,:,i))-(P231(:,:,i)*H03'*k3pp2(:,i+1)'+P232(:,:,i)*H13'*k3pp2(:,i+1)'+P233(:,:,i)*H23'*k3pp2(:,i+1)');
-    P232(:,:,i+1)=(P235(:,:,i+1)*fai0'+P236(:,:,i+1)*fai1'+P2314(:,:,i+1)*fai2'+(-k2(:,i+1)*S2'-(P231(:,:,i)*H03'+P232(:,:,i)*H13'+P233(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k2(:,i+1)*Qeps23(i+1)*inv(Qeps3(i+1))'*S3')*gama')';
+    P232(:,:,i+1)=(P235(:,:,i+1)*fai0'+P236(:,:,i+1)*fai1'+P2314(:,:,i+1)*fai2'+(-k2(:,i+1)*S2'-(P231(:,:,i)*H03'+P232(:,:,i)*H13'+P233(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k2(:,i+1)*Qeps23(i+1)*(inv(Qeps3(i+1)))'*S3')*gama')';
     P2315(:,:,i+1)=P236(:,:,i)+k2pp(:,i+1)*Qeps23(i+1)*k3pp2(:,i+1)'-k2pp(:,i+1)*(H02*P233(:,:,i)+H12*P236(:,:,i)+H22*P239(:,:,i))-(P232(:,:,i)'*H03'*k3pp2(:,i+1)'+P235(:,:,i)*H13'*k3pp2(:,i+1)'+P236(:,:,i)*H23'*k3pp2(:,i+1)');
-    P233(:,:,i+1)=(P232(:,:,i+1)*fai0'+P239(:,:,i+1)*fai1'+P2315(:,:,i+1)*fai2+(-k2pp(:,i+1)*S2'-(P232(:,:,i)'*H03'+P235(:,:,i)*H13'+P236(:,:,i)*H23')*inv(Qeps3(i+1))'*S3'+k2pp(:,i+1)*Qeps23(i+1)*inv(Qeps3(i+1))'*S3')*gama')';
-    P231(:,:,i+1)=fai0*P232(:,:,i+1)'+fai1*P233(:,:,i+1)'+fai2*P2310(:,:,i+1)+gama*(-S3*k3(:,i+1)'-S2*inv(Qeps2(i+1))*(H02*P231(:,:,i)'+H12*P232(:,:,i)'+H22*P233(:,:,i)')+S2*inv(Qeps2(i+1))*Qeps23(i+1)*k3(:,i+1)')*fai0'+...;
+    P233(:,:,i+1)=(P232(:,:,i+1)*fai0'+P239(:,:,i+1)*fai1'+P2315(:,:,i+1)*fai2+(-k2pp(:,i+1)*S2'-(P232(:,:,i)'*H03'+P235(:,:,i)*H13'+P236(:,:,i)*H23')*(inv(Qeps3(i+1)))'*S3'+k2pp(:,i+1)*Qeps23(i+1)*(inv(Qeps3(i+1)))'*S3')*gama')';
+    P231(:,:,i+1)=fai0*P232(:,:,i+1)'+fai1*P233(:,:,i+1)'+fai2*P2310(:,:,i+1)+...
+        gama*(-S3*k3(:,i+1)'-S2*inv(Qeps2(i+1))*(H02*P231(:,:,i)'+H12*P232(:,:,i)'+H22*P233(:,:,i)')+S2*inv(Qeps2(i+1))*Qeps23(i+1)*k3(:,i+1)')*fai0'+...;
         gama*(-S3*k3pp(:,i+1)'-S2*inv(Qeps2(i+1))*(H02*P232(:,:,i)+H12*P235(:,:,i)+H22*P236(:,:,i)')+S2*inv(Qeps2(i+1))*Qeps23(i+1)*k3pp(:,i+1)')*fai1'+...
-        gama*(-S3*k3pp2(:,i+1)'-S2*inv(Qeps2(i+1))*(H02*P233(:,:,i)+H12*P233(:,:,i)+H22*P239(:,:,i))+S2*inv(Qeps2(i+1))*Qeps23(i+1)*k3pp2(:,i+1)')*fai2'+...
+        gama*(-S3*k3pp2(:,i+1)'-S2*inv(Qeps2(i+1))*(H02*P233(:,:,i)+H12*P236(:,:,i)+H22*P239(:,:,i))+S2*inv(Qeps2(i+1))*Qeps23(i+1)*k3pp2(:,i+1)')*fai2'+...
         gama*(Qw+S2*inv(Qeps2(i+1))*Qeps23(i+1)*(inv(Qeps3(i+1)))'*S3'-S3*inv(Qeps3(i+1))*S3'-S2*inv(Qeps2(i+1))*S2')*gama';
 end
 %-----------------按矩阵加权---------------%
-for i=1:Bushu
-    Psigma(:,:,i)=[p11(:,:,i),P121(:,:,i),P131(:,:,i);
-                  P121(:,:,i)',p21(:,:,i),P231(:,:,i);
-                  P131(:,:,i)',P231(:,:,i)',p31(:,:,i)];
+for i=2:Bushu+1
+    Psigma(:,:,i)=[p11(:,:,i-1),P121(:,:,i-1),P131(:,:,i-1);
+                  P121(:,:,i-1)',p21(:,:,i-1),P231(:,:,i-1);
+                  P131(:,:,i-1)',P231(:,:,i-1)',p31(:,:,i-1)];
 end
 e=[eye(2),eye(2),eye(2)]';
-for i=20:Bushu
+for i=3:Bushu+1
     A(:,:,i)=inv(Psigma(:,:,i))*e*inv(e'*inv(Psigma(:,:,i))*e);
-    Pm(:,:,i)=inv(e'*inv(Psigma(:,:,i))*e);%误差方差阵
-    xfjianp(:,i)=A(1:2,:,i)'*x1jianp(:,i)+A(3:4,:,i)'*x2jianp(:,i)+A(5:6,:,i)'*x3jianp(:,i);
+    Pm(:,:,i-1)=inv(e'*inv(Psigma(:,:,i))*e);%误差方差阵
+    xfjianp(:,i-1)=A(1:2,:,i)'*x1jianp(:,i-1)+A(3:4,:,i)'*x2jianp(:,i-1)+A(5:6,:,i)'*x3jianp(:,i-1);
 end
 trace_Pm=trace(Pm(:,:,Bushu))
 t=1:Bushu;
@@ -261,59 +262,79 @@ figure
 subplot(2,2,1);plot(t,x(1,t),'b',t,xci132(1,t),'r:');
 subplot(2,2,2);plot(t,x(2,t),'b',t,xci132(2,t),'r:');
 %-----------------ex---------------%
-% ex1(Bushu)=[0];ex2(Bushu)=[0];ex3(Bushu)=[0];exf(Bushu)=[0];exc(Bushu)=[0];
-% ex1(1)=(x1jianp(1,1)-x(1,1))*(x1jianp(1,1)-x(1,1));
+% ex1(:,:,1)=(x1jianp(:,1)-x(:,1))*(x1jianp(:,1)-x(:,1))';
+% ex2(:,:,1)=(x2jianp(:,1)-x(:,1))*(x2jianp(:,1)-x(:,1))';
+% ex3(:,:,1)=(x3jianp(:,1)-x(:,1))*(x3jianp(:,1)-x(:,1))';
+% exf(:,:,1)=(xfjianp(:,1)-x(:,1))*(xfjianp(:,1)-x(:,1))';
+% exc(:,:,1)=(xci132(:,1)-x(:,1))*(xci132(:,1)-x(:,1))';
 % for i=2:Bushu
-%    ex1(i)=(x1jianp(1,i)-x(1,i))*(x1jianp(1,i)-x(1,i))+ex1(i-1);
+%    ex1(:,:,i)=(x1jianp(:,i)-x(:,i))*(x1jianp(:,i)-x(:,i))'+ex1(:,:,i-1); 
+%    ex2(:,:,i)=(x2jianp(:,i)-x(:,i))*(x2jianp(:,i)-x(:,i))'+ex2(:,:,i-1);  
+%    ex3(:,:,i)=(x3jianp(:,i)-x(:,i))*(x3jianp(:,i)-x(:,i))'+ex3(:,:,i-1);
+%    exf(:,:,i)=(xfjianp(:,i)-x(:,i))*(xfjianp(:,i)-x(:,i))'+exf(:,:,i-1);
+%    exc(:,:,i)=(xci132(:,i)-x(:,i))*(xci132(:,i)-x(:,i))'+exc(:,:,i-1);
 % end   
-% ex2(1)=(x2jianp(1,1)-x(1,1))*(x2jianp(1,1)-x(1,1));
 % for i=2:Bushu
-%    ex2(i)=(x2jianp(1,i)-x(1,i))*(x2jianp(1,i)-x(1,i))+ex2(i-1);
-% end   
-% ex3(1)=(x3jianp(1,1)-x(1,1))*(x3jianp(1,1)-x(1,1));
-% for i=2:Bushu
-%    ex3(i)=(x3jianp(1,i)-x(1,i))*(x3jianp(1,i)-x(1,i))+ex3(i-1);
-% end   
-% exf(1)=(xfjianp(1,1)-x(1,1))*(xfjianp(1,1)-x(1,1));
-% for i=2:Bushu
-%    exf(i)=(xfjianp(1,i)-x(1,i))*(xfjianp(1,i)-x(1,i))+exf(i-1);
-% end   
-% exc(1)=(xci132(1,1)-x(1,1))*(xci132(1,1)-x(1,1));
-% for i=2:Bushu
-%    exc(i)=(xci132(1,i)-x(1,i))*(xci132(1,i)-x(1,i))+exc(i-1);
-% end   
-% t=1:Bushu;
+%     e11(i)=ex1(1,1,i);e12(i)=ex2(1,1,i);e13(i)=ex1(1,1,i);e1f(i)=exf(1,1,i);e1c(i)=exc(1,1,i);
+%     e21(i)=ex1(2,2,i);e22(i)=ex2(2,2,i);e23(i)=ex1(2,2,i);e2f(i)=exf(2,2,i);e2c(i)=exc(2,2,i);
+% end
+% t=2:Bushu;
 % figure
-% plot(t,ex1(t),'m',t,ex2(t),'b',t,ex3(t),'r',t,exf(t),'k',t,exc(t),'k:');
+% subplot(2,2,1);plot(t,e11(t),'m',t,e12(t),'b',t,e13(t),'r',t,e1f(t),'k',t,e1c(t),'k:');
+% subplot(2,2,2);plot(t,e21(t),'m',t,e22(t),'b',t,e23(t),'r',t,e2f(t),'k',t,e2c(t),'k:');
 
-% ex1(Bushu)=[0];ex2(Bushu)=[0];ex3(Bushu)=[0];exf(Bushu)=[0];exc(Bushu)=[0];
-% ex1(1)=(x1jianp(2,1)-x(2,1))*(x1jianp(2,1)-x(2,1));
-% for i=2:Bushu
-%    ex1(i)=(x1jianp(2,i)-x(2,i))*(x1jianp(2,i)-x(2,i))+ex1(i-1);
-% end   
-% ex2(1)=(x2jianp(2,1)-x(2,1))*(x2jianp(2,1)-x(2,1));
-% for i=2:Bushu
-%    ex2(i)=(x2jianp(2,i)-x(2,i))*(x2jianp(2,i)-x(2,i))+ex2(i-1);
-% end   
-% ex3(1)=(x3jianp(2,1)-x(2,1))*(x3jianp(2,1)-x(2,1));
-% for i=2:Bushu
-%    ex3(i)=(x3jianp(2,i)-x(2,i))*(x3jianp(2,i)-x(2,i))+ex3(i-1);
-% end   
-% exf(1)=(xfjianp(2,1)-x(2,1))*(xfjianp(2,1)-x(2,1));
-% for i=2:Bushu
-%    exf(i)=(xfjianp(2,i)-x(2,i))*(xfjianp(2,i)-x(2,i))+exf(i-1);
-% end   
-% exc(1)=(xci132(2,1)-x(2,1))*(xci132(2,1)-x(2,1));
-% for i=2:Bushu
-%    exc(i)=(xci132(2,i)-x(2,i))*(xci132(2,i)-x(2,i))+exc(i-1);
-% end   
-% t=1:Bushu;
-% figure
-% plot(t,ex1(t),'m',t,ex2(t),'b',t,ex3(t),'r',t,exf(t),'k',t,exc(t),'k:');
+ex11(1)=(x1jianp(1,1)-x(1,1))*(x1jianp(1,1)-x(1,1));
+for i=2:Bushu
+   ex11(i)=(x1jianp(1,i)-x(1,i))*(x1jianp(1,i)-x(1,i))+ex11(i-1);
+end   
+ex12(1)=(x2jianp(1,1)-x(1,1))*(x2jianp(1,1)-x(1,1));
+for i=2:Bushu
+   ex12(i)=(x2jianp(1,i)-x(1,i))*(x2jianp(1,i)-x(1,i))+ex12(i-1);
+end   
+ex13(1)=(x3jianp(1,1)-x(1,1))*(x3jianp(1,1)-x(1,1));
+for i=2:Bushu
+   ex13(i)=(x3jianp(1,i)-x(1,i))*(x3jianp(1,i)-x(1,i))+ex13(i-1);
+end   
+ex1f(1)=(xfjianp(1,1)-x(1,1))*(xfjianp(1,1)-x(1,1));
+for i=2:Bushu
+   ex1f(i)=(xfjianp(1,i)-x(1,i))*(xfjianp(1,i)-x(1,i))+ex1f(i-1);
+end   
+ex1c(1)=(xci132(1,1)-x(1,1))*(xci132(1,1)-x(1,1));
+for i=2:Bushu
+   ex1c(i)=(xci132(1,i)-x(1,i))*(xci132(1,i)-x(1,i))+ex1c(i-1);
+end   
+t=1:Bushu;
+figure
+plot(t,ex11(t),'m',t,ex12(t),'b',t,ex13(t),'r',t,ex1f(t),'k',t,ex1c(t),'k:');
+
+
+ex21(1)=(x1jianp(2,1)-x(2,1))*(x1jianp(2,1)-x(2,1));
+for i=2:Bushu
+   ex21(i)=(x1jianp(2,i)-x(2,i))*(x1jianp(2,i)-x(2,i))+ex21(i-1);
+end   
+ex22(1)=(x2jianp(2,1)-x(2,1))*(x2jianp(2,1)-x(2,1));
+for i=2:Bushu
+   ex22(i)=(x2jianp(2,i)-x(2,i))*(x2jianp(2,i)-x(2,i))+ex22(i-1);
+end   
+ex23(1)=(x3jianp(2,1)-x(2,1))*(x3jianp(2,1)-x(2,1));
+for i=2:Bushu
+   ex23(i)=(x3jianp(2,i)-x(2,i))*(x3jianp(2,i)-x(2,i))+ex23(i-1);
+end   
+ex2f(1)=(xfjianp(2,1)-x(2,1))*(xfjianp(2,1)-x(2,1));
+for i=2:Bushu
+   ex2f(i)=(xfjianp(2,i)-x(2,i))*(xfjianp(2,i)-x(2,i))+ex2f(i-1);
+end   
+ex2c(1)=(xci132(2,1)-x(2,1))*(xci132(2,1)-x(2,1));
+for i=2:Bushu
+   ex2c(i)=(xci132(2,i)-x(2,i))*(xci132(2,i)-x(2,i))+ex2c(i-1);
+end   
+t=1:Bushu;
+figure
+plot(t,ex21(t),'m',t,ex22(t),'b',t,ex23(t),'r',t,ex2f(t),'k',t,ex2c(t),'k:');
 %--------------实际误差方差阵-------------% 
-Pci132_=Pci132*(w132*w13*w132*w13*inv(pp1)*pp1*inv(pp1)+w132*w13*w132*(1-w13)*inv(pp1)*P135(:,:,Bushu)*inv(pp3)+...
-        w132*w13*(1-w132)*inv(pp1)*P125(:,:,Bushu)*inv(pp2)+w132*(1-w13)*w132*w13*inv(pp3)*P135(:,:,Bushu)'*inv(pp1)+w132*(1-w13)*w132*(1-w13)*inv(pp3)+...
-        w132*(1-w13)*(1-w132)*inv(pp3)*P235(:,:,Bushu)'*inv(pp2)+(1-w132)*w132*w13*inv(pp2)*P125(:,:,Bushu)'*inv(pp1)+(1-w132)*w132*(1-w13)*inv(pp2)*P235(:,:,Bushu)*inv(pp3)+...
+Pci132_=Pci132*(w132*w13*w132*w13*inv(pp1)*pp1*inv(pp1)+w132*w13*w132*(1-w13)*inv(pp1)*P131(:,:,Bushu)*inv(pp3)+...
+        w132*w13*(1-w132)*inv(pp1)*P121(:,:,Bushu)*inv(pp2)+w132*(1-w13)*w132*w13*inv(pp3)*P131(:,:,Bushu)'*inv(pp1)+w132*(1-w13)*w132*(1-w13)*inv(pp3)+...
+        w132*(1-w13)*(1-w132)*inv(pp3)*P231(:,:,Bushu)'*inv(pp2)+(1-w132)*w132*w13*inv(pp2)*P121(:,:,Bushu)'*inv(pp1)+(1-w132)*w132*(1-w13)*inv(pp2)*P231(:,:,Bushu)*inv(pp3)+...
         (1-w132)*(1-w132)*inv(pp2)*pp2*inv(pp2))*Pci132;
 %-----------------椭圆半径-----------------%
 P1_ni=inv(pp1);P2_ni=inv(pp2);P3_ni=inv(pp3);
@@ -336,4 +357,4 @@ polar(theta,r2,'b');
 polar(theta,r3,'r');
 polar(theta,rm,'k');
 polar(theta,rci132,'k:');
-polar(theta,rci132_,'k-.');axis([-0.45,0.45,-1.3,1.3]);
+polar(theta,rci132_,'k-.');
