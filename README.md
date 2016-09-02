@@ -26,3 +26,8 @@
 
 	SCI Fusion Estimations for Multi-Sensor Time-Delay Systems with Correlated Noise(带相关噪声多传感器多时滞系统的SCI融合估值器)
 	为了避免噪声相关带来的推导上的复杂性，先将带相关噪声的系统转化为带不相关白噪声的系统，然后再进行融合。
+
+5. [Time Delayed with Colored Noise](https://github.com/Jon-Wang/Information-Fusion-and-State-Estimation/tree/master/Time%20Delayed%20with%20Colored%20Noise)
+
+	Sequential Covariance Intersection Fusion Kalman Filter for Multiple Time-delay Sensor Network Systems with Colored Noise(带有色噪声多重时滞传感网络系统的序贯协方差交叉融合Kalman滤波器)
+	将带有色噪声的系统转化为带相关噪声的系统，然后再进行融合。
